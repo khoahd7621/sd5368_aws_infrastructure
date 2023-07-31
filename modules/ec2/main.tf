@@ -18,5 +18,24 @@ resource "aws_instance" "PracticalDevOpsSD5368_ec2" {
   vpc_security_group_ids  = ["${aws_security_group.PracticalDevOpsSD5368_security_group.id}"]
   subnet_id               = aws_subnet.PracticalDevOpsSD5368_public_subnet.id
 
+  user_data = <<-EOF
+    #!/bin/bash
+    yum update -y
+    wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+    rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+    yum upgrade
+    amazon-linux-extras install java-openjdk11 -y
+    dnf install java-11-amazon-corretto -y
+    yum install jenkins -y
+    systemctl enable jenkins
+    systemctl start jenkins
+    sudo yum update -y
+    sudo yum -y install docker
+    sudo service docker start
+    sudo usermod -a -G docker ec2-user
+    sudo chmod 666 /var/run/docker.sock
+    EOF
+
   tags = module.ec2_instance_tags.tags
 }
