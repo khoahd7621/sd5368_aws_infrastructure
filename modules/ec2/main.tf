@@ -17,6 +17,7 @@ resource "aws_instance" "PracticalDevOpsSD5368_ec2" {
   key_name                = aws_key_pair.generated_key.key_name
   vpc_security_group_ids  = ["${aws_security_group.PracticalDevOpsSD5368_security_group.id}"]
   subnet_id               = aws_subnet.PracticalDevOpsSD5368_public_subnet.id
+  iam_instance_profile    = aws_iam_instance_profile.ec2_profile.name
 
   user_data = <<-EOF
     #!/bin/bash
@@ -35,6 +36,8 @@ resource "aws_instance" "PracticalDevOpsSD5368_ec2" {
     sudo service docker start
     sudo usermod -a -G docker ec2-user
     sudo chmod 666 /var/run/docker.sock
+    sudo usermod -a -G docker jenkins
+    yum install git -y
     EOF
 
   tags = module.ec2_instance_tags.tags
