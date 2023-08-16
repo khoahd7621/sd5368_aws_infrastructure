@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  name   = "practical-devops-sd5368-cluster"
+  name   = "practical-devops-sd5368-eks"
   region = "us-east-1"
 
   vpc_cidr = "10.123.0.0/16"
@@ -73,7 +73,7 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    practical-devops-sd5368-cluster-wg = {
+    sd5368-eks-wg = {
       min_size     = 1
       max_size     = 2
       desired_size = 1
