@@ -38,6 +38,10 @@ resource "aws_instance" "PracticalDevOpsSD5368_ec2" {
     sudo chmod 666 /var/run/docker.sock
     sudo usermod -a -G docker jenkins
     yum install git -y
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+    echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+    sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
     EOF
 
   tags = module.ec2_instance_tags.tags
