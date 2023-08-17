@@ -58,6 +58,9 @@ module "eks" {
     vpc-cni = {
       most_recent = true
     }
+    aws-ebs-csi-driver = {
+      most_recent = true
+    }
   }
 
   vpc_id                   = module.vpc.vpc_id
@@ -70,6 +73,11 @@ module "eks" {
     instance_types = ["m5.large"]
 
     attach_cluster_primary_security_group = true
+    iam_role_policies = [
+      "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+      "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+      "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+    "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
   }
 
   eks_managed_node_groups = {
